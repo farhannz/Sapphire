@@ -15,7 +15,7 @@ src/tools/[Bb]in/mob_parse
 src/tools/[Bb]in/pcb_reader2
 src/tools/[Bb]in/quest_parse
 src/tools/[Bb]in/exd_struct_gen
-
+src2/**/*
 # Script Directory
 # TODO: Sperate script directory from bin
 !bin/scripts/**/*
