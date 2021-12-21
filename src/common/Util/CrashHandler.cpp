@@ -220,7 +220,7 @@ void Util::CrashHandler::printStackTrace( unsigned int max_frames )
       lineNum = line.LineNumber;
     }
 
-    Logger::fatal( "[{:x}] {}({}): {} ({})", frame.AddrPC.Offset, fileName, lineNum, funcName, moduleName );
+    Logger::fatal( "[{:x}] {}({}): {} ({})\n", frame.AddrPC.Offset, fileName, lineNum, funcName, moduleName );
   }
 
   SymCleanup( process );

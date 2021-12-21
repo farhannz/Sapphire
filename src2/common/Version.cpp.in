@@ -1,0 +1,9 @@
+#include "Version.h"
+
+namespace Sapphire::Version
+{
+
+  const std::string GIT_HASH = "@GIT_SHA1@";
+  const std::string VERSION = "@VERSION@";
+
+} /* Sapphire::Version */

@@ -720,13 +720,15 @@ void Sapphire::Entity::BNpc::calculateStats()
   auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( level );
 
   float base = Math::CalcStats::calculateBaseStat( *this );
-
-  m_baseStats.str = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierStrength ) / 100 ) );
-  m_baseStats.dex = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierDexterity ) / 100 ) );
-  m_baseStats.vit = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierVitality ) / 100 ) );
-  m_baseStats.inte = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierIntelligence ) / 100 ) );
-  m_baseStats.mnd = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierMind ) / 100 ) );
-  //m_baseStats.pie = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierPiety ) / 100 ) );
+  if (classInfo != nullptr) {
+    m_baseStats.str = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierStrength) / 100));
+    m_baseStats.dex = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierDexterity) / 100));
+    m_baseStats.vit = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierVitality) / 100));
+    m_baseStats.inte = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierIntelligence) / 100));
+    m_baseStats.mnd = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierMind) / 100));
+    //m_baseStats.pie = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierPiety ) / 100 ) );
+  }
+  
 
   m_baseStats.determination = static_cast< uint32_t >( base );
   m_baseStats.pie = static_cast< uint32_t >( base );

@@ -66,10 +66,11 @@ void Sapphire::World::Manager::MapMgr::updateAll( Entity::Player& player )
             case EventHandler::EventHandlerType::Quest:
             {
               auto quest = m_quests[ npcData ];
-
-              if( quest->issuerLocation == eventNpc.first )
-              {
-                insertQuest( player, npcData, mapData );
+              if(quest != nullptr){
+                if( quest->issuerLocation == eventNpc.first )
+                {
+                  insertQuest( player, npcData, mapData );
+                }
               }
               break;
             }
@@ -175,10 +176,11 @@ void Sapphire::World::Manager::MapMgr::updateAll( Entity::Player& player )
           if( eventHandlerType == EventHandler::EventHandlerType::Quest )
           {
             auto quest = m_quests[ eObjData ];
-
-            if( quest->issuerLocation == eventObj.first )
-            {
-              insertQuest( player, eObjData, mapData );
+            if(quest != nullptr){
+              if( quest->issuerLocation == eventObj.first )
+              {
+                insertQuest( player, eObjData, mapData );
+              }
             }
           }
         }
@@ -218,10 +220,11 @@ void Sapphire::World::Manager::MapMgr::updateQuests( Entity::Player& player )
         if( eventHandlerType == EventHandler::EventHandlerType::Quest )
         {
           auto quest = m_quests[ npcData ];
-
-          if( quest->issuerLocation == eventNpc.first )
-          {
-            insertQuest( player, npcData, mapData );
+          if(quest != nullptr){
+            if( quest->issuerLocation == eventNpc.first )
+            {
+              insertQuest( player, npcData, mapData );
+            }
           }
         }
       }
@@ -248,10 +251,11 @@ void Sapphire::World::Manager::MapMgr::updateQuests( Entity::Player& player )
           if( eventHandlerType == EventHandler::EventHandlerType::Quest )
           {
             auto quest = m_quests[ eObjData ];
-
-            if( quest->issuerLocation == eventObj.first )
-            {
-              insertQuest( player, eObjData, mapData );
+            if(quest != nullptr){
+              if( quest->issuerLocation == eventObj.first )
+              {
+                insertQuest( player, eObjData, mapData );
+              }
             }
           }
         }

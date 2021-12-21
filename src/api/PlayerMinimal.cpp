@@ -178,7 +178,11 @@ std::string PlayerMinimal::getInfoJson()
 
 uint8_t PlayerMinimal::getClassLevel()
 {
-  uint8_t classJobIndex = g_exdDataGen.get< Sapphire::Data::ClassJob >( static_cast< uint8_t >( m_class ) )->expArrayIndex;
+  auto classJob = g_exdDataGen.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(m_class));
+  uint8_t classJobIndex;
+  if (classJob != nullptr) {
+    classJobIndex = classJob->expArrayIndex;
+  }
   return static_cast< uint8_t >( m_classMap[ classJobIndex ] );
 }
 
@@ -302,7 +306,10 @@ void PlayerMinimal::saveAsNew()
   // CharacterId, ClassIdx, Exp, Lvl
   auto stmtClass = g_charaDb.getPreparedStatement( Db::ZoneDbStatements::CHARA_CLASS_INS );
   stmtClass->setInt( 1, m_id );
-  stmtClass->setInt( 2, g_exdDataGen.get< Sapphire::Data::ClassJob >( m_class )->expArrayIndex );
+  auto something = g_exdDataGen.get< Sapphire::Data::ClassJob >(m_class);
+  if (something != nullptr) {
+    stmtClass->setInt(2, something->expArrayIndex);
+  }
   stmtClass->setInt( 3, 0 );
   stmtClass->setInt( 4, 1 );
   g_charaDb.directExecute( stmtClass );
@@ -346,7 +353,11 @@ void PlayerMinimal::saveAsNew()
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /// SETUP EQUIPMENT / STARTING GEAR
   auto classJobInfo = g_exdDataGen.get< Sapphire::Data::ClassJob >( m_class );
-  uint32_t weaponId = classJobInfo->itemStartingWeapon;
+  uint32_t weaponId = 0;
+  if (classJobInfo != nullptr) {
+    weaponId = classJobInfo->itemStartingWeapon;
+  }
+
   uint64_t uniqueId = getNextUId64();
 
   uint8_t race = customize[ CharaLook::Race ];
