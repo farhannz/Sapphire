@@ -279,7 +279,7 @@ namespace Sapphire::Network::Packets
     SomeDirectorUnk2 = 0xF0C1, // updated 5.18
     //SomeDirectorUnk4 = 0x03DD, // updated 5.58 hotfix
     SomeDirectorUnk8 = 0x028A, // updated 5.18
-    SomeDirectorUnk16 = 0x028C, // updated 5.18
+    SomeDirectorUnk16 = 0x028B, // updated 5.18
     DirectorPopUp = 0x03DF, // updated 5.58 hotfix
     DirectorPopUp4 = 0x019B, // updated 5.58 hotfix
     DirectorPopUp8 = 0x0271, // updated 5.58 hotfix
@@ -404,15 +404,20 @@ namespace Sapphire::Network::Packets
     KickPartyMemberHandler = 0x0262, // updated 5.58 hotfix
     DisbandPartyHandler = 0x0276, // updated 5.58 hotfix
 
+<<<<<<< Updated upstream
     SocialListHandler = 0x01CA, // updated 5.58 hotfix
     SetSearchInfoHandler = 0x03B1,// updated 6.0
+=======
+    SocialListHandler = 0x0132, // updated 5.58 hotfix
+    SetSearchInfoHandler = 0x01A1,// updated 6.0
+>>>>>>> Stashed changes
     //SetSearchInfoHandler = 0x01D4, // updated 5.58 hotfix
     ReqSearchInfoHandler = 0x0304,//? // updated 5.58 hotfix
     ReqExamineSearchCommentHandler = 0x00E7, // updated 5.0
 
     ReqRemovePlayerFromBlacklist = 0x00B4, // updated 5.58 hotfix
-    BlackListHandler = 0x00F2, // updated 5.58 hotfix
-    PlayerSearchHandler = 0x037D, // updated 5.58 hotfix
+    BlackListHandler = 0x028C, // updated 6.01?
+    PlayerSearchHandler = 0x0146, // updated 6.01?
 
     LinkshellListHandler = 0x03B6, // updated 5.58 hotfix
 

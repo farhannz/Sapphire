@@ -711,11 +711,46 @@ void Sapphire::Entity::BNpc::autoAttack( CharaPtr pTarget )
 
 void Sapphire::Entity::BNpc::calculateStats()
 {
-  uint8_t level = getLevel();
-  uint8_t job = static_cast< uint8_t >( getClass() );
+  try {
+    uint8_t level = getLevel();
+    uint8_t job = static_cast<uint8_t>(getClass());
 
-  auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
+    auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
+    /*auto classRow = exdData.m_ClassJobDat.get_row(job);
+    auto classIndex = exdData.getField<int8_t>(classRow, 4);*/
+    /*auto classInfo = exdData.get< Sapphire::Data::ClassJob >( job );
+    auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( level );*/
+    Sapphire::Data::ClassJob classInfoVal(job, &exdData);
+    Sapphire::Data::ParamGrow paramGrowthInfoVal(level, &exdData);
 
+    Sapphire::Data::ClassJob* classInfo = &classInfoVal;
+    Sapphire::Data::ParamGrow* paramGrowthInfo = &paramGrowthInfoVal;
+    float base = Math::CalcStats::calculateBaseStat(*this);
+    m_baseStats.str = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierStrength) / 100));
+    m_baseStats.dex = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierDexterity) / 100));
+    m_baseStats.vit = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierVitality) / 100));
+    m_baseStats.inte = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierIntelligence) / 100));
+    m_baseStats.mnd = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierMind) / 100));
+    //m_baseStats.pie = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierPiety ) / 100 ) );
+
+
+    m_baseStats.determination = static_cast<uint32_t>(base);
+    m_baseStats.pie = static_cast<uint32_t>(base);
+    m_baseStats.skillSpeed = static_cast<uint32_t>(paramGrowthInfo->baseSpeed);
+    m_baseStats.spellSpeed = static_cast<uint32_t>(paramGrowthInfo->baseSpeed);
+    m_baseStats.accuracy = static_cast<uint32_t>(paramGrowthInfo->baseSpeed);
+    m_baseStats.critHitRate = static_cast<uint32_t>(paramGrowthInfo->baseSpeed);
+    m_baseStats.attackPotMagic = static_cast<uint32_t>(paramGrowthInfo->baseSpeed);
+    m_baseStats.healingPotMagic = static_cast<uint32_t>(paramGrowthInfo->baseSpeed);
+    m_baseStats.tenacity = static_cast<uint32_t>(paramGrowthInfo->baseSpeed);
+
+    m_baseStats.attack = m_baseStats.str;
+    m_baseStats.attackPotMagic = m_baseStats.inte;
+    m_baseStats.healingPotMagic = m_baseStats.mnd;
+  }
+  catch (...) {
+
+<<<<<<< Updated upstream
   auto classInfo = exdData.get< Sapphire::Data::ClassJob >( job );
   auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( level );
 
@@ -743,4 +778,8 @@ void Sapphire::Entity::BNpc::calculateStats()
   m_baseStats.attack = m_baseStats.str;
   m_baseStats.attackPotMagic = m_baseStats.inte;
   m_baseStats.healingPotMagic = m_baseStats.mnd;
+=======
+  }
+  
+>>>>>>> Stashed changes
 }
