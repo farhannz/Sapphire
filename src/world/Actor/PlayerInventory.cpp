@@ -117,16 +117,19 @@ void Sapphire::Entity::Player::equipWeapon( ItemPtr pItem, bool updateClass )
   auto itemInfo = exdData.get< Sapphire::Data::Item >( pItem->getId() );
   auto itemClassJob = itemInfo->classJobUse;
   auto classJobInfo = exdData.get< Sapphire::Data::ClassJob >( static_cast< uint32_t >( getClass() ) );
-  auto currentParentClass = static_cast< ClassJob >( classJobInfo->classJobParent );
-  auto newClassJob = static_cast< ClassJob >( itemClassJob );
+  if (classJobInfo != nullptr) {
+    auto currentParentClass = static_cast<ClassJob>(classJobInfo->classJobParent);
+    auto newClassJob = static_cast<ClassJob>(itemClassJob);
 
-  if( ( isClassJobUnlocked( newClassJob ) ) && ( currentParentClass != newClassJob ) )
-  {
-    if ( updateClass )
-      setClassJob( newClassJob );
-    else
-      return;
+    if ((isClassJobUnlocked(newClassJob)) && (currentParentClass != newClassJob))
+    {
+      if (updateClass)
+        setClassJob(newClassJob);
+      else
+        return;
+    }
   }
+
 }
 
 void Sapphire::Entity::Player::equipSoulCrystal( ItemPtr pItem, bool updateJob )
@@ -293,8 +296,11 @@ void Sapphire::Entity::Player::unequipSoulCrystal( ItemPtr pItem )
   auto& exdData = Common::Service< Sapphire::Data::ExdDataGenerated >::ref();
 
   auto currentClassJob = exdData.get< Sapphire::Data::ClassJob >( static_cast< uint32_t >( getClass() ) );
-  auto parentClass = static_cast< ClassJob >( currentClassJob->classJobParent );
-  setClassJob( parentClass );
+  if (currentClassJob != nullptr) {
+    auto parentClass = static_cast<ClassJob>(currentClassJob->classJobParent);
+    setClassJob(parentClass);
+  }
+  
 }
 
 // TODO: these next functions are so similar that they could likely be simplified

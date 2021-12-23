@@ -27,6 +27,7 @@
 #include "Player.h"
 #include "Manager/TerritoryMgr.h"
 #include "Common.h"
+#include "Logging/Logger.h"
 
 using namespace Sapphire::Common;
 using namespace Sapphire::Network::Packets;
@@ -40,7 +41,6 @@ Sapphire::Entity::Chara::Chara( ObjKind type ) :
   m_directorId( 0 ),
   m_radius( 1.f )
 {
-
   m_lastTickTime = 0;
   m_lastUpdate = 0;
   m_lastAttack = Util::getTimeMs();
@@ -763,11 +763,23 @@ float Sapphire::Entity::Chara::getRadius() const
 Sapphire::Common::BaseParam Sapphire::Entity::Chara::getPrimaryStat() const
 {
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
+  
+  if (exdData.get< Data::ClassJob >(static_cast<uint16_t>(getClass())) != nullptr) {
+    auto classJob = exdData.get< Data::ClassJob >(static_cast<uint16_t>(getClass()));
+    if (classJob != nullptr) {
+      assert(classJob);
+    }
 
-  auto classJob = exdData.get< Data::ClassJob >( static_cast< uint16_t >( getClass() ) );
-  assert( classJob );
+    return static_cast<Sapphire::Common::BaseParam>(classJob->primaryStat);
+  }
+  // auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
 
-  return static_cast< Sapphire::Common::BaseParam >( classJob->primaryStat );
+  // auto classJob = exdData.get< Data::ClassJob >( static_cast< uint16_t >( getClass() ) );
+  // if(classJob != nullptr){
+  //   assert( classJob );
+  // }
+
+  // return static_cast< Sapphire::Common::BaseParam >( classJob->primaryStat );
 }
 
 uint32_t Sapphire::Entity::Chara::getStatValue( Sapphire::Common::BaseParam baseParam ) const

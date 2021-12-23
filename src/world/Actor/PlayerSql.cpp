@@ -505,9 +505,16 @@ void Sapphire::Entity::Player::updateSql()
 
 void Sapphire::Entity::Player::updateDbClass() const
 {
+  // auto& db = Common::Service< Db::DbWorkerPool< Db::ZoneDbConnection > >::ref();
+  // auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
+  // uint8_t classJobIndex = exdData.get< Sapphire::Data::ClassJob >( static_cast<uint8_t>( getClass() ) )->expArrayIndex;
   auto& db = Common::Service< Db::DbWorkerPool< Db::ZoneDbConnection > >::ref();
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-  uint8_t classJobIndex = exdData.get< Sapphire::Data::ClassJob >( static_cast<uint8_t>( getClass() ) )->expArrayIndex;
+  auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
+  uint8_t classJobIndex = 0;
+  if (something != nullptr) {
+    classJobIndex = something->expArrayIndex;
+  }
 
   //Exp = ?, Lvl = ? WHERE CharacterId = ? AND ClassIdx = ?
   auto stmtS = db.getPreparedStatement( Db::CHARA_CLASS_UP );
