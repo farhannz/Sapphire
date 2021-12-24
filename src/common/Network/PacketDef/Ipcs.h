@@ -405,7 +405,7 @@ namespace Sapphire::Network::Packets
     DisbandPartyHandler = 0x0276, // updated 5.58 hotfix
 
     SocialListHandler = 0x0132, // updated 5.58 hotfix
-    SetSearchInfoHandler = 0x01A1,// updated 6.0
+    SetSearchInfoHandler = 0x01A1,// Updated 6.01
     //SetSearchInfoHandler = 0x01D4, // updated 5.58 hotfix
     ReqSearchInfoHandler = 0x0304,//? // updated 5.58 hotfix
     ReqExamineSearchCommentHandler = 0x00E7, // updated 5.0
@@ -419,7 +419,7 @@ namespace Sapphire::Network::Packets
     MarketBoardRequestItemListingInfo = 0x00F4, // updated 5.58 hotfix
     MarketBoardRequestItemListings = 0x0122, // updated 5.58 hotfix
     MarketBoardSearch = 0x0082, // updated 5.58 hotfix
-    MarketBoardPurchaseHandler = 0x00DC,// updated 6.0
+    MarketBoardPurchaseHandler = 0x00FD,// Updated 6.01
 
 
     ReqExamineFcInfo = 0x037B, // updated 5.58 hotfix
@@ -450,7 +450,7 @@ namespace Sapphire::Network::Packets
     UpdatePositionHandler = 0x03CA,// updated 6.01?
     //UpdatePositionHandler = 0x01AF, // updated 5.58 hotfix
 
-    InventoryModifyHandler = 0x00A3,// updated 6.0 (Base offset: 0x00AA)
+    InventoryModifyHandler = 0x0097,// Updated 6.01 (Base offset: 0x009E)
     //InventoryModifyHandler = 0x029E, // updated 5.58 hotfix
 
     InventoryEquipRecommendedItems = 0x01C9, // updated 5.58 hotfix
@@ -483,7 +483,7 @@ namespace Sapphire::Network::Packets
 
     SetSharedEstateSettings = 0x00D2, // updated 5.58 hotfix
 
-    UpdatePositionInstance = 0x0163,// updated 6.0
+    UpdatePositionInstance = 0x038D,// Updated 6.01
     //UpdatePositionInstance = 0x00F8, // updated 5.58 hotfix
 
     PerformNoteHandler = 0x0243, // updated 5.58 hotfix
