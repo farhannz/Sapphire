@@ -380,7 +380,7 @@ namespace Sapphire::Network::Packets
     PingHandler = 0x0377,// updated 6.01?
     InitHandler = 0x0091, //updated 6.01
 
-    FinishLoadingHandler = 0x0287,// updater 6.0.1?,//0x013C, // updated 5.58 hotfix
+    FinishLoadingHandler = 0x0287,// updated 6.0.1?,//0x013C, // updated 5.58 hotfix
 
     CFCommenceHandler = 0x0381, // updated 5.58 hotfix
 
@@ -404,13 +404,8 @@ namespace Sapphire::Network::Packets
     KickPartyMemberHandler = 0x0262, // updated 5.58 hotfix
     DisbandPartyHandler = 0x0276, // updated 5.58 hotfix
 
-<<<<<<< Updated upstream
-    SocialListHandler = 0x01CA, // updated 5.58 hotfix
-    SetSearchInfoHandler = 0x03B1,// updated 6.0
-=======
     SocialListHandler = 0x0132, // updated 5.58 hotfix
     SetSearchInfoHandler = 0x01A1,// updated 6.0
->>>>>>> Stashed changes
     //SetSearchInfoHandler = 0x01D4, // updated 5.58 hotfix
     ReqSearchInfoHandler = 0x0304,//? // updated 5.58 hotfix
     ReqExamineSearchCommentHandler = 0x00E7, // updated 5.0

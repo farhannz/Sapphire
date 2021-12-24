@@ -762,34 +762,16 @@ float Sapphire::Entity::Chara::getRadius() const
 
 Sapphire::Common::BaseParam Sapphire::Entity::Chara::getPrimaryStat() const
 {
-<<<<<<< Updated upstream
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
   
   if (exdData.get< Data::ClassJob >(static_cast<uint16_t>(getClass())) != nullptr) {
-=======
-  try {
-    auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-    uint8_t job = static_cast<uint8_t>(getClass());
-    Data::ClassJob classInfoVal(job, &exdData);
-
-    Data::ClassJob* classJob = &classInfoVal;
-    assert(classJob);
-    return static_cast<Sapphire::Common::BaseParam>(classJob->primaryStat);
-  }
-  catch(...){}
-  /*if (exdData.get< Data::ClassJob >(static_cast<uint16_t>(getClass())) != nullptr) {
->>>>>>> Stashed changes
     auto classJob = exdData.get< Data::ClassJob >(static_cast<uint16_t>(getClass()));
     if (classJob != nullptr) {
       assert(classJob);
     }
 
     return static_cast<Sapphire::Common::BaseParam>(classJob->primaryStat);
-<<<<<<< Updated upstream
   }
-=======
-  }*/
->>>>>>> Stashed changes
   // auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
 
   // auto classJob = exdData.get< Data::ClassJob >( static_cast< uint16_t >( getClass() ) );

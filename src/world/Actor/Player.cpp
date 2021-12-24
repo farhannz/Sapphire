@@ -264,27 +264,12 @@ void Sapphire::Entity::Player::calculateStats()
 
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
 
-  /*auto classInfo = exdData.get< Sapphire::Data::ClassJob >( job );
+  auto classInfo = exdData.get< Sapphire::Data::ClassJob >( job );
   auto tribeInfo = exdData.get< Sapphire::Data::Tribe >( tribe );
-<<<<<<< Updated upstream
   auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( level );
 
   float base = Math::CalcStats::calculateBaseStat( *this );
   if (classInfo != nullptr) {
-=======
-  auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( level );*/
-  try {
-    Sapphire::Data::ClassJob classInfoVal(job, &exdData);
-    Sapphire::Data::ParamGrow paramGrowthInfoVal(level, &exdData);
-    Sapphire::Data::Tribe tribeInfoVal(tribe, &exdData);
-
-    Sapphire::Data::ClassJob* classInfo = &classInfoVal;
-    Sapphire::Data::ParamGrow* paramGrowthInfo = &paramGrowthInfoVal;
-    Sapphire::Data::Tribe* tribeInfo = &tribeInfoVal;
-
-    float base = Math::CalcStats::calculateBaseStat(*this);
-    //if (classInfo != nullptr) {
->>>>>>> Stashed changes
     m_baseStats.str = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierStrength) / 100) +
       tribeInfo->sTR);
     m_baseStats.dex = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierDexterity) / 100) +
@@ -295,7 +280,6 @@ void Sapphire::Entity::Player::calculateStats()
       tribeInfo->iNT);
     m_baseStats.mnd = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierMind) / 100) +
       tribeInfo->mND);
-<<<<<<< Updated upstream
   }
   
   /*m_baseStats.pie = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierPiety ) / 100 ) +
@@ -321,41 +305,9 @@ void Sapphire::Entity::Player::calculateStats()
 
   if( m_mp > m_baseStats.max_mp )
     m_mp = m_baseStats.max_mp;
-=======
-    //}
 
-    /*m_baseStats.pie = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierPiety ) / 100 ) +
-                                               tribeInfo->pIE );*/
-
-    m_baseStats.determination = static_cast<uint32_t>(base);
-    m_baseStats.pie = static_cast<uint32_t>(base);
-    m_baseStats.skillSpeed = paramGrowthInfo->baseSpeed;
-    m_baseStats.spellSpeed = paramGrowthInfo->baseSpeed;
-    m_baseStats.accuracy = paramGrowthInfo->baseSpeed;
-    m_baseStats.critHitRate = paramGrowthInfo->baseSpeed;
-    m_baseStats.attackPotMagic = paramGrowthInfo->baseSpeed;
-    m_baseStats.healingPotMagic = paramGrowthInfo->baseSpeed;
-    m_baseStats.tenacity = paramGrowthInfo->baseSpeed;
-
-    m_baseStats.attack = m_baseStats.str;
-    m_baseStats.attackPotMagic = m_baseStats.inte;
-    m_baseStats.healingPotMagic = m_baseStats.mnd;
-
-    m_baseStats.max_mp = 10000;
-
-    m_baseStats.max_hp = Math::CalcStats::calculateMaxHp(getAsPlayer());
-
-    if (m_mp > m_baseStats.max_mp)
-      m_mp = m_baseStats.max_mp;
-
-    if (m_hp > m_baseStats.max_hp)
-      m_hp = m_baseStats.max_hp;
-  }
-  catch (...) {
->>>>>>> Stashed changes
-
-  }
-  
+  if( m_hp > m_baseStats.max_hp )
+    m_hp = m_baseStats.max_hp;
 
 }
 

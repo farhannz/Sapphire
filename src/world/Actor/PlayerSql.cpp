@@ -510,22 +510,12 @@ void Sapphire::Entity::Player::updateDbClass() const
   // uint8_t classJobIndex = exdData.get< Sapphire::Data::ClassJob >( static_cast<uint8_t>( getClass() ) )->expArrayIndex;
   auto& db = Common::Service< Db::DbWorkerPool< Db::ZoneDbConnection > >::ref();
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-<<<<<<< Updated upstream
   auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
   uint8_t classJobIndex = 0;
   if (something != nullptr) {
     classJobIndex = something->expArrayIndex;
   }
 
-=======
-  /*auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
-  uint8_t classJobIndex = 0;
-  if (something != nullptr) {
-    classJobIndex = something->expArrayIndex;
-  }*/
-  auto classRow = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(m_class));
-  auto classJobIndex = exdData.getField<int8_t>(classRow, 4);
->>>>>>> Stashed changes
   //Exp = ?, Lvl = ? WHERE CharacterId = ? AND ClassIdx = ?
   auto stmtS = db.getPreparedStatement( Db::CHARA_CLASS_UP );
   stmtS->setInt( 1, getExp() );
