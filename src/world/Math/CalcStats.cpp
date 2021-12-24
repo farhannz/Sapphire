@@ -148,19 +148,26 @@ uint32_t CalcStats::calculateMaxHp( PlayerPtr pPlayer )
   // Is there any way to pull reliable BaseHP without having to manually use a pet for every level, and using the values from a table?
   // More info here: https://docs.google.com/spreadsheets/d/1de06KGT0cNRUvyiXNmjNgcNvzBCCQku7jte5QxEQRbs/edit?usp=sharing
 
-  auto classInfo = exdData.get< Sapphire::Data::ClassJob >( static_cast< uint8_t >( pPlayer->getClass() ) );
-  auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( pPlayer->getLevel() );
+  // auto classInfo = exdData.get< Sapphire::Data::ClassJob >( static_cast< uint8_t >( pPlayer->getClass() ) );
+  // auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( pPlayer->getLevel() );
 
-  if( !classInfo || !paramGrowthInfo )
-    return 0;
+  // if( !classInfo || !paramGrowthInfo )
+  //   return 0;
+  // Class Info
+  auto rowClass = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>( pPlayer->getClass()));
 
+  // Param Growth
   uint8_t level = pPlayer->getLevel();
+  auto rowParam = exdData.m_ParamGrowDat.get_row(static_cast<uint32_t>( level));
+  auto hpModifier = exdData.getField< uint16_t >( rowParam, 8 );
 
+  // Modifier
   auto vitMod = pPlayer->getBonusStat( Common::BaseParam::Vitality );
   float baseStat = calculateBaseStat( *pPlayer );
   uint16_t vitStat = static_cast< uint16_t >( pPlayer->getStats().vit ) + static_cast< uint16_t >( vitMod );
-  uint16_t hpMod = paramGrowthInfo->hpModifier;
-  uint16_t jobModHp = classInfo->modifierHitPoints;
+  auto modifierHitPoints = exdData.getField< uint16_t >( rowClass, 9 );
+  uint16_t hpMod = hpModifier;
+  uint16_t jobModHp = modifierHitPoints;
   float approxBaseHp = 0.0f; // Read above
 
   // These values are not precise.

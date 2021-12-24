@@ -25,7 +25,8 @@ PlayerMinimal::PlayerMinimal() :
 // TODO change void CPlayer::load to bool, we want to know if something went wrong
 void PlayerMinimal::load( uint32_t charId )
 {
-
+  auto something = &g_exdDataGen;
+  auto abc = something->m_ClassJobDat;
   auto stmt = g_charaDb.getPreparedStatement( Db::ZoneDbStatements::CHARA_SEL_MINIMAL );
 
   stmt->setUInt( 1, charId );
@@ -60,7 +61,7 @@ void PlayerMinimal::load( uint32_t charId )
   m_class = res->getUInt8( "Class" );
   m_contentId = res->getUInt64( "ContentId" );
   m_territoryTypeId = res->getUInt16( "TerritoryType" );
-  
+
   res.reset();
 
   // SELECT ClassIdx, Exp, Lvl
@@ -178,11 +179,9 @@ std::string PlayerMinimal::getInfoJson()
 
 uint8_t PlayerMinimal::getClassLevel()
 {
-  /*auto classJob = g_exdDataGen.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(m_class));
+  auto classJob = g_exdDataGen.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(m_class));
   uint8_t classJobIndex;
-  classJobIndex = classJob->expArrayIndex;*/
-  auto classRow = g_exdDataGen.m_ClassJobDat.get_row(m_class);
-  auto classJobIndex = g_exdDataGen.getField<int8_t>(classRow, 4);
+  classJobIndex = classJob->expArrayIndex;
   return static_cast< uint8_t >( m_classMap[ classJobIndex ] );
 }
 
@@ -306,8 +305,7 @@ void PlayerMinimal::saveAsNew()
   // CharacterId, ClassIdx, Exp, Lvl
   auto stmtClass = g_charaDb.getPreparedStatement( Db::ZoneDbStatements::CHARA_CLASS_INS );
   stmtClass->setInt( 1, m_id );
-
-  /*try {
+  try {
     //std::shared_ptr<Sapphire::Data::ClassJob> something(new Sapphire::Data::ClassJob(m_class, &g_exdDataGen));
     auto something = Sapphire::Data::ClassJob(m_class,&g_exdDataGen);
     stmtClass->setInt(2, something.expArrayIndex);
@@ -315,13 +313,7 @@ void PlayerMinimal::saveAsNew()
     stmtClass->setInt(4, 1);
     g_charaDb.directExecute(stmtClass);
   }
-  catch (...) {}*/
-  auto classRow = g_exdDataGen.m_ClassJobDat.get_row(m_class);
-  auto classIndex = g_exdDataGen.getField<int8_t>(classRow, 4);
-  stmtClass->setInt(2, classIndex);
-  stmtClass->setInt(3, 0);
-  stmtClass->setInt(4, 1);
-  g_charaDb.directExecute(stmtClass);
+  catch (...) {}
 
   auto stmtSearchInfo = g_charaDb.getPreparedStatement( Db::ZoneDbStatements::CHARA_SEARCHINFO_INS );
   stmtSearchInfo->setInt( 1, m_id );
@@ -399,14 +391,13 @@ void PlayerMinimal::saveAsNew()
     feet = raceInfo->rSEFFeet;
   }
   
-  //try {
-  //  auto classJobInfo = g_exdDataGen.get<Sapphire::Data::ClassJob>(m_class);
-  //  
-  //  //insertDbGlobalItem(weaponId, uniqueId);
-  //}
-  //catch (...) {}
-  uint32_t weaponId = g_exdDataGen.getField< int32_t >(classRow, 28);
-  insertDbGlobalItem( weaponId, uniqueId );
+  try {
+    auto classJobInfo = g_exdDataGen.get<Sapphire::Data::ClassJob>(m_class);
+    
+    //insertDbGlobalItem(weaponId, uniqueId);
+  }
+  catch (...) {}
+  insertDbGlobalItem( 2142, uniqueId );
   insertDbGlobalItem( body, bodyUid );
   insertDbGlobalItem( hands, handsUid );
   insertDbGlobalItem( legs, legsUid );

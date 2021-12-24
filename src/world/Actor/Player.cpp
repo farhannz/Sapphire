@@ -268,41 +268,62 @@ void Sapphire::Entity::Player::calculateStats()
   auto tribeInfo = exdData.get< Sapphire::Data::Tribe >( tribe );
   auto paramGrowthInfo = exdData.get< Sapphire::Data::ParamGrow >( level );
 
+  // Class Info
+  auto row = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(job));
+  auto modifierStrength = exdData.getField<uint16_t>(row,11);
+  auto modifierVitality = exdData.getField< uint16_t >(row, 12);
+  auto modifierDexterity = exdData.getField< uint16_t >(row, 13);
+  auto modifierIntelligence = exdData.getField< uint16_t >(row, 14);
+  auto modifierMind = exdData.getField< uint16_t >(row, 15);
+
+  // Tribe Info
+  row = exdData.m_TribeDat.get_row(tribe);
+  auto sTR = exdData.getField< int8_t >(row, 4);
+  auto vIT = exdData.getField< int8_t >(row, 5);
+  auto dEX = exdData.getField< int8_t >(row, 6);
+  auto iNT = exdData.getField< int8_t >(row, 7);
+  auto mND = exdData.getField< int8_t >(row, 8);
+  auto pIE = exdData.getField< int8_t >(row, 9);
+
   float base = Math::CalcStats::calculateBaseStat( *this );
-  if (classInfo != nullptr) {
-    m_baseStats.str = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierStrength) / 100) +
-      tribeInfo->sTR);
-    m_baseStats.dex = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierDexterity) / 100) +
-      tribeInfo->dEX);
-    m_baseStats.vit = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierVitality) / 100) +
-      tribeInfo->vIT);
-    m_baseStats.inte = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierIntelligence) / 100) +
-      tribeInfo->iNT);
-    m_baseStats.mnd = static_cast<uint32_t>(base * (static_cast<float>(classInfo->modifierMind) / 100) +
-      tribeInfo->mND);
-  }
+  m_baseStats.str = static_cast<uint32_t>(base * (static_cast<float>(modifierStrength) / 100) +
+    sTR);
+  m_baseStats.dex = static_cast<uint32_t>(base * (static_cast<float>(modifierDexterity) / 100) +
+    dEX);
+  m_baseStats.vit = static_cast<uint32_t>(base * (static_cast<float>(modifierVitality) / 100) +
+    vIT);
+  m_baseStats.inte = static_cast<uint32_t>(base * (static_cast<float>(modifierIntelligence) / 100) +
+    iNT);
+  m_baseStats.mnd = static_cast<uint32_t>(base * (static_cast<float>(modifierMind) / 100) +
+    mND);
   
   /*m_baseStats.pie = static_cast< uint32_t >( base * ( static_cast< float >( classInfo->modifierPiety ) / 100 ) +
                                              tribeInfo->pIE );*/
 
+
+  // Param Growth Info
+  row = exdData.m_ParamGrowDat.get_row(level);
+  auto baseSpeed = exdData.getField< int32_t >(row, 5);
+
+
   m_baseStats.determination = static_cast< uint32_t >( base );
   m_baseStats.pie = static_cast< uint32_t >( base );
-  m_baseStats.skillSpeed = paramGrowthInfo->baseSpeed;
-  m_baseStats.spellSpeed = paramGrowthInfo->baseSpeed;
-  m_baseStats.accuracy = paramGrowthInfo->baseSpeed;
-  m_baseStats.critHitRate = paramGrowthInfo->baseSpeed;
-  m_baseStats.attackPotMagic = paramGrowthInfo->baseSpeed;
-  m_baseStats.healingPotMagic = paramGrowthInfo->baseSpeed;
-  m_baseStats.tenacity = paramGrowthInfo->baseSpeed;
+  m_baseStats.skillSpeed = baseSpeed;
+  m_baseStats.spellSpeed = baseSpeed;
+  m_baseStats.accuracy = baseSpeed;
+  m_baseStats.critHitRate = baseSpeed;
+  m_baseStats.attackPotMagic = baseSpeed;
+  m_baseStats.healingPotMagic = baseSpeed;
+  m_baseStats.tenacity = baseSpeed;
 
   m_baseStats.attack = m_baseStats.str;
   m_baseStats.attackPotMagic = m_baseStats.inte;
   m_baseStats.healingPotMagic = m_baseStats.mnd;
 
   m_baseStats.max_mp = 10000;
-
+  m_baseStats.max_hp = 4000;
   m_baseStats.max_hp = Math::CalcStats::calculateMaxHp( getAsPlayer() );
-
+    
   if( m_mp > m_baseStats.max_mp )
     m_mp = m_baseStats.max_mp;
 
@@ -829,11 +850,13 @@ void Sapphire::Entity::Player::sendStatusUpdate()
 uint8_t Sapphire::Entity::Player::getLevel() const
 {
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-  uint8_t classJobIndex = 0;
-  auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
-  if (something != nullptr) {
-    classJobIndex = something->expArrayIndex;
-  }
+  // uint8_t classJobIndex = 0;
+  // auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
+  // if (something != nullptr) {
+  //   classJobIndex = something->expArrayIndex;
+  // }
+  auto row = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(getClass()));
+  uint8_t classJobIndex = exdData.getField< int8_t >( row, 4 );
   
   return static_cast< uint8_t >( m_classArray[ classJobIndex ] );
 }
@@ -841,12 +864,13 @@ uint8_t Sapphire::Entity::Player::getLevel() const
 uint8_t Sapphire::Entity::Player::getLevelForClass( Common::ClassJob pClass ) const
 {
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-  uint8_t classJobIndex = 0;
-  auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(pClass));
-  if (something != nullptr) {
-    classJobIndex = something->expArrayIndex;
-  }
-  
+  // uint8_t classJobIndex = 0;
+  // auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(pClass));
+  // if (something != nullptr) {
+  //   classJobIndex = something->expArrayIndex;
+  // }
+  auto row = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(pClass));
+  uint8_t classJobIndex = exdData.getField< int8_t >( row, 4 );
   return static_cast< uint8_t >( m_classArray[ classJobIndex ] );
 }
 
@@ -859,12 +883,13 @@ bool Sapphire::Entity::Player::isClassJobUnlocked( Common::ClassJob classJob ) c
 uint32_t Sapphire::Entity::Player::getExp() const
 {
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-  uint8_t classJobIndex = 0;
-  auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
-  if (something != nullptr) {
-    classJobIndex = something->expArrayIndex;
-  }
-  
+  // uint8_t classJobIndex = 0;
+  // auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
+  // if (something != nullptr) {
+  //   classJobIndex = something->expArrayIndex;
+  // }
+  auto row = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(getClass()));
+  uint8_t classJobIndex = exdData.getField< int8_t >( row, 4 );
   return m_expArray[ classJobIndex ];
 }
 
@@ -874,11 +899,13 @@ void Sapphire::Entity::Player::setExp( uint32_t amount )
   //auto exdData = Common::Service< Data::ExdDataGenerated >::ref();
   //uint8_t classJobIndex = exdData.get< Sapphire::Data::ClassJob >( static_cast< uint8_t >( getClass() ) )->expArrayIndex;
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-  uint8_t classJobIndex = 0;
-  auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
-  if (something != nullptr) {
-    classJobIndex = something->expArrayIndex;
-  }
+  // uint8_t classJobIndex = 0;
+  // auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
+  // if (something != nullptr) {
+  //   classJobIndex = something->expArrayIndex;
+  // }
+  auto row = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(getClass()));
+  uint8_t classJobIndex = exdData.getField< int8_t >( row, 4 );
   m_expArray[ classJobIndex ] = amount;
 }
 
@@ -923,27 +950,30 @@ void Sapphire::Entity::Player::setClassJob( Common::ClassJob classJob )
 void Sapphire::Entity::Player::setLevel( uint8_t level )
 {
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-  uint8_t classJobIndex = 0;
-  auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
-  if (something != nullptr) {
-    classJobIndex = something->expArrayIndex;
-  }
+  // uint8_t classJobIndex = 0;
+  // auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
+  // if (something != nullptr) {
+  //   classJobIndex = something->expArrayIndex;
+  // }
   //auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
   //uint8_t classJobIndex = exdData.get< Sapphire::Data::ClassJob >( static_cast< uint8_t >( getClass() ) )->expArrayIndex;
+  auto row = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(getClass()));
+  uint8_t classJobIndex = exdData.getField< int8_t >( row, 4 );
   m_classArray[ classJobIndex ] = level;
 }
 
 void Sapphire::Entity::Player::setLevelForClass( uint8_t level, Common::ClassJob classjob )
 {
   auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
-  uint8_t classJobIndex = 0;
-  auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
-  if (something != nullptr) {
-    classJobIndex = something->expArrayIndex;
-  }
+  // uint8_t classJobIndex = 0;
+  // auto something = exdData.get< Sapphire::Data::ClassJob >(static_cast<uint8_t>(getClass()));
+  // if (something != nullptr) {
+  //   classJobIndex = something->expArrayIndex;
+  // }
   //auto& exdData = Common::Service< Data::ExdDataGenerated >::ref();
   //uint8_t classJobIndex = exdData.get< Sapphire::Data::ClassJob >( static_cast< uint8_t >( classjob ) )->expArrayIndex;
-
+  auto row = exdData.m_ClassJobDat.get_row(static_cast<uint32_t>(getClass()));
+  uint8_t classJobIndex = exdData.getField< int8_t >( row, 4 );
   if( m_classArray[ classJobIndex ] == 0 )
     insertDbClass( classJobIndex );
 
